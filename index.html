@@ -1,0 +1,67 @@
+﻿<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <style>
+        .utubedata{
+            //border:1px solid black;
+            padding:10px;
+            border-radius:10px;
+            margin-top:15px;
+        }
+
+        .utube_container{
+            border:1px solid black;
+        }
+    </style>
+</head>
+<body>
+    <input type="text" class="query" />
+    <button class="btn">Fetch Youtube Data</button>
+    <div class="utubedata">
+        
+    </div>
+
+    <script>
+        document.querySelector('.btn').addEventListener('click', function () {
+            //alert('hi..')
+            console.log(document.querySelector('.query').value)
+            const query = document.querySelector('.query').value;
+            fetch(`https://www.googleapis.com/youtube/v3/search?key=AIzaSyD7OFr3e-qLlJnM-NA8YTeVeA92wh5uX9g&type=video&part=snippet&maxResults=10&q=${query}`)
+                .then((res) => {
+                    return res.json()
+                })
+                .then((data) => {
+                    console.log(data)
+                    console.log(data.items)
+                    data.items.forEach((item) => {
+                        //console.log('item fetched')
+                        console.log(item.snippet.channelId)
+                        console.log(item.snippet.title)
+                        console.log(item.snippet.channelTitle)
+                        console.log(item.snippet.description)
+                        console.log(item.snippet.thumbnails.default.url)
+
+                        document.querySelector('.utubedata').innerHTML += `
+                        <div class="utube_container">
+                            <p>${item.snippet.channelId}</p>
+                            <p>${item.snippet.title}</p>
+                            <p>${item.snippet.channelTitle}</p>
+                            <p>${item.snippet.description}</p>
+                            <p><a href=${item.snippet.thumbnails.default.url} target='__blank'>${item.snippet.thumbnails.default.url}</a></p>
+                        </div>
+                        `; 
+                    })
+             
+                })
+                .catch((e) => {
+                    console.log(e)
+                })
+
+        })
+
+    </script>
+</body>
+</html>
